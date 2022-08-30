@@ -5,44 +5,38 @@ import sourcesService from "./services/sourcesService";
 import { IDoutuImage } from "./services/sources";
 
 export default function Command() {
-  const [itemSize, setItemSize] = useState<Grid.ItemSize>(Grid.ItemSize.Medium);
   const [isLoading, setIsLoading] = useState(true);
   const [list, setList] = useState<IDoutuImage[]>([]);
+  let counter = 0;
 
   useEffect(() => {
-    refreshList("快扶我", 1, 10);
+    refreshList("hello", 1, 10);
   }, []);
 
   const refreshList = async (keyword: string, pageIndex: number, pageSize: number) => {
+    setIsLoading(true);
     setList(await sourcesService.get(keyword, pageIndex, pageSize));
+    setIsLoading(false);
   };
 
   return (
     <Grid
+      throttle={true}
+      selectedItemId={"aaa"}
       isLoading={isLoading}
-      onSelectionChange={(id) => {
-        if (id) {
-          const item = list.find((o) => o.id.toString() == id);
-          item && clipboardService.imageToClipboard(item.url);
-        }
+      onSearchTextChange={(keyword) => {
+        refreshList(keyword, 1, 10);
       }}
-      searchBarAccessory={
-        <Grid.Dropdown
-          tooltip="Grid Item Size"
-          storeValue
-          onChange={(newValue) => {
-            setItemSize(newValue as Grid.ItemSize);
-            setIsLoading(false);
-          }}
-        >
-          <Grid.Dropdown.Item title="Large" value={Grid.ItemSize.Large} />
-          <Grid.Dropdown.Item title="Medium" value={Grid.ItemSize.Medium} />
-          <Grid.Dropdown.Item title="Small" value={Grid.ItemSize.Small} />
-        </Grid.Dropdown>
-      }
+      onSelectionChange={(id) => {
+        if (!id) return;
+        if (id == "0" && counter < 2) return counter++;
+        const item = list.find((o) => o.id.toString() == id);
+        item && clipboardService.imageToClipboard(item.url);
+      }}
     >
-      {!isLoading &&
-        list.map((item, index) => <Grid.Item key={index} id={item.id.toString()} content={{ source: item.url }} />)}
+      {list.map((item, index) => (
+        <Grid.Item key={index} id={item.id.toString()} content={{ source: item.url }} />
+      ))}
     </Grid>
   );
 }
