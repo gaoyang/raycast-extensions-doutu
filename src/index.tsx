@@ -10,7 +10,7 @@ export default function Command() {
   const [list, setList] = useState<IDoutuImage[]>([]);
 
   useEffect(() => {
-    refreshList("", 1, 10);
+    refreshList("快扶我", 1, 10);
   }, []);
 
   const refreshList = async (keyword: string, pageIndex: number, pageSize: number) => {
