@@ -3,17 +3,17 @@
   "name": "dou-tu",
   "title": "斗图",
   "description": "上班时间斗个图🌟",
-  "icon": "command-icon.png",
+  "icon": "icon.png",
   "author": "gaoyang",
   "categories": [
-    "Media"
+    "Media",
+    "Fun"
   ],
   "license": "MIT",
   "commands": [
     {
       "name": "index",
       "title": "斗图",
-      "subtitle": "斗图",
       "description": "上班时间斗个图🌟",
       "mode": "view"
     }
