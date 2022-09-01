@@ -3,14 +3,14 @@
   <h1 align="center">Dou Tu Extension for Raycast</h1>
 </p>
 
-🌟上班时间斗个图 
+🌟 A picture fight during working hours
 
 ## Features
-- 支持关键词搜索
-- 支持点击图片自动复制到剪切板
+- Support for quick search of emoji packs
+- Support click to copy to clipboard
 
 ## Author
 
-**Leo** (gaoyang)
+[ 🇨🇳 ] **Leo** (gaoyang) 
 
 - [GitHub](https://www.github.com/gaoyang)
