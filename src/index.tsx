@@ -27,7 +27,6 @@ export default function Command() {
       currentPageIndex = -1;
       return;
     }
-
     setList([...(currentPageIndex === 2 ? [] : list), placeholderItem, ...items]);
     setSelectedItemId(placeholderItem.id);
     setIsLoading(false);
