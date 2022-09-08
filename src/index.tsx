@@ -16,8 +16,6 @@ export default function Command() {
   const [list, setList] = useState<IDoutuImage[]>([])
 
   useEffect(() => {
-    console.log('eee')
-
     more()
   }, [])
 
