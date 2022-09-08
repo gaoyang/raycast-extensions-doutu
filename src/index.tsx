@@ -16,6 +16,8 @@ export default function Command() {
   const [list, setList] = useState<IDoutuImage[]>([])
 
   useEffect(() => {
+    console.log('eee')
+
     more()
   }, [])
 
@@ -39,8 +41,9 @@ export default function Command() {
     <Grid.Dropdown
       tooltip="Select Source"
       storeValue={true}
-      onChange={newValue => {
-        sourcesService.changeSource(newValue)
+      onChange={sourceName => {
+        if (sourceName === sourcesService.getSource()?.name) return
+        sourcesService.changeSource(sourceName)
         currentPageIndex = 1
         more()
       }}>
