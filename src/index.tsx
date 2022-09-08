@@ -5,12 +5,13 @@ import sourcesService from './services/sourcesService'
 import { IDoutuImage } from './services/sources'
 import { v4 as uuidv4 } from 'uuid'
 
-let currentKeyword = 'ok'
+let currentKeyword = ''
 let currentPageIndex = 1
 let awaitRequest = false
 
 export default function Command() {
   const [isLoading, setIsLoading] = useState(true)
+  const [isEnd, setIsEnd] = useState(true)
   const [selectedItemId, setSelectedItemId] = useState('placeholder_1')
   const [list, setList] = useState<IDoutuImage[]>([])
 
@@ -22,15 +23,34 @@ export default function Command() {
     setIsLoading(true)
     awaitRequest = true
     const placeholderItem = { id: `placeholder_${currentPageIndex}_${uuidv4()}`, url: '' }
-    const items = await sourcesService.get(currentKeyword, currentPageIndex++)
-    if (items.length === 0) {
+    const result = await sourcesService.get(currentKeyword, currentPageIndex++)
+    setIsEnd(result.isEnd)
+    if (result.images.length === 0) {
       currentPageIndex = -1
-      return
+      setList([])
+    } else {
+      setList([...(currentPageIndex === 2 ? [] : list), placeholderItem, ...result.images])
+      setSelectedItemId(placeholderItem.id)
     }
-    setList([...(currentPageIndex === 2 ? [] : list), placeholderItem, ...items])
-    setSelectedItemId(placeholderItem.id)
     setIsLoading(false)
   }
+
+  const searchBarAccessory = (
+    <Grid.Dropdown
+      tooltip="Select Source"
+      storeValue={true}
+      onChange={newValue => {
+        sourcesService.changeSource(newValue)
+        currentPageIndex = 1
+        more()
+      }}>
+      <Grid.Dropdown.Section title="Emoji Categories">
+        {sourcesService.sources.map((source, index) => (
+          <Grid.Dropdown.Item key={index} title={source.name} value={source.name} />
+        ))}
+      </Grid.Dropdown.Section>
+    </Grid.Dropdown>
+  )
 
   return (
     <Grid
@@ -38,7 +58,7 @@ export default function Command() {
       isLoading={isLoading}
       selectedItemId={selectedItemId}
       onSearchTextChange={keyword => {
-        currentKeyword = keyword == '' ? 'ok' : keyword
+        currentKeyword = keyword
         currentPageIndex = 1
         more()
       }}
@@ -55,7 +75,8 @@ export default function Command() {
         }
         const item = list.find(o => o.id === id)
         item && clipboardService.imageToClipboard(item.url)
-      }}>
+      }}
+      searchBarAccessory={searchBarAccessory}>
       {list.map((item, index) =>
         item.id.startsWith('placeholder_') ? (
           <Grid.Item
@@ -72,7 +93,7 @@ export default function Command() {
           <Grid.Item key={index} id={item.id.toString()} content={{ source: item.url }} />
         )
       )}
-      {list.length === 0 ? (
+      {isEnd ? (
         <></>
       ) : (
         <Grid.Item key="more" id="more" content={{ tooltip: 'Click more', value: { source: 'more.png' } }} />

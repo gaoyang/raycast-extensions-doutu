@@ -1,11 +1,17 @@
-import { ISource, DouTuLaSource } from './sources'
+import { ISource, DouTuLaSource, DouTuSource } from './sources'
 
-const sources: ISource[] = [new DouTuLaSource()]
-const source = sources[0]
+const sources: ISource[] = [new DouTuSource(), new DouTuLaSource()]
+let source: ISource
 
 export default {
+  sources,
+  changeSource: (sourceName: string) => {
+    console.log(`changeSource -> ${sourceName}`)
+    source = sources.find(o => o.name === sourceName) ?? sources[0]
+  },
   get: (keyword: string, pageIndex: number) => {
-    // console.log(`keyword:${keyword} pageIndex:${pageIndex}`);
+    if (!source) return { isEnd: true, images: [] }
+    console.log(`get -> keyword:${keyword} pageIndex:${pageIndex}`)
     return source.get(keyword, pageIndex)
   }
 }

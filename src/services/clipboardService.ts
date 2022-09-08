@@ -1,10 +1,15 @@
-import { environment, showHUD } from '@raycast/api'
+import { environment, showHUD, showToast, Toast } from '@raycast/api'
 import fetch from 'node-fetch'
 import fs from 'fs'
 import proc from 'child_process'
 
 export default {
   imageToClipboard: async (imageUrl: string) => {
+    const toast = await showToast({
+      style: Toast.Style.Animated,
+      title: 'Waiting',
+      message: 'Being copied to the clipboard...'
+    })
     const tempDir = `${environment.assetsPath}/temp`
     if (!fs.existsSync(tempDir)) await fs.mkdirSync(tempDir)
     else {
@@ -18,6 +23,7 @@ export default {
     const filePath = `${tempDir}/${fileName}`
     await fs.writeFileSync(filePath, new Uint8Array(data), 'binary')
     proc.exec(`osascript -e 'set the clipboard to (read (POSIX file "${filePath}") as JPEG picture)'`)
+    toast.hide()
     showHUD('Already copied to clipboard.(Command + V)')
   }
 }
