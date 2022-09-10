@@ -18,7 +18,7 @@ export class DouTuSource implements ISource {
   get = async (keyword: string | null, pageIndex: number): Promise<{ isEnd: boolean; images: IDoutuImage[] }> => {
     keyword = keyword && keyword.trim() !== "" ? keyword : defaultKeyword;
     const response = await fetch(
-      `https://doutu.lccyy.com/doutu/items?keyword=${keyword}&page=${pageIndex}&pageSize=50`
+      `https://doutu.lccyy.com/doutu/items?keyword=${keyword}&pageNum=${pageIndex}&pageSize=50`
     );
     const json = (await response.json()) as {
       totalSize: number;
