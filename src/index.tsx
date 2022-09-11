@@ -12,9 +12,10 @@ let awaitRequest = false;
 export default function Command() {
   const [isLoading, setIsLoading] = useState(true);
   const [isEnd, setIsEnd] = useState(true);
-  const [selectedItemId, setSelectedItemId] = useState<string | undefined>("placeholder_1");
   const [list, setList] = useState<IDoutuImage[]>([]);
   const [selectMode, setSelectMode] = useState("actions");
+  // eslint-disable-next-line prefer-const
+  let [selectedItemId, setSelectedItemId] = useState<string | undefined>();
 
   useEffect(() => {
     more();
@@ -22,6 +23,7 @@ export default function Command() {
       select_mode: string;
     }>();
     setSelectMode(select_mode);
+    if (select_mode === "click") setSelectedItemId("placeholder_1");
   }, []);
 
   const more = async () => {
@@ -44,12 +46,6 @@ export default function Command() {
 
   const selectAction = (id: string | undefined) => {
     if (!id) return;
-    if (id.startsWith("placeholder_")) {
-      awaitRequest = false;
-      return;
-    }
-    if (awaitRequest) return;
-
     const item = list.find((o) => o.id === id);
     item && clipboardService.imageToClipboard(item.url);
   };
@@ -90,8 +86,16 @@ export default function Command() {
         more();
       }}
       onSelectionChange={(id: string | undefined) => {
-        if (id === "more" && currentPageIndex > 0) return more();
-        selectMode === "click" && selectAction(id);
+        if (!id) return;
+        if (selectMode === "click") {
+          if (awaitRequest) return (awaitRequest = !id.startsWith("placeholder_"));
+          if (id.startsWith("placeholder_")) return;
+          if (id === "more" && currentPageIndex > 0) return more();
+          selectAction(id);
+        } else {
+          if (id === "more" && currentPageIndex > 0) return more();
+          selectedItemId = id;
+        }
       }}
       searchBarAccessory={searchBarAccessory}
     >
