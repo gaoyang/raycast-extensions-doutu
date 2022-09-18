@@ -1,5 +1,5 @@
 <p align="center">
-  <img src="assets/icon.png" height="128">
+  <img src="assets/icon.png" height="128" width="128">
   <h1 align="center">Dou Tu Extension for Raycast</h1>
 </p>
 
