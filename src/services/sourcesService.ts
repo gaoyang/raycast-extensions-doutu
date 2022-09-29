@@ -13,6 +13,8 @@ export default {
   get: (keyword: string, pageIndex: number) => {
     if (!source) return { isEnd: true, images: [] };
     // console.log(`get -> keyword:${keyword} pageIndex:${pageIndex}`)
-    return source.get(keyword, pageIndex);
+    return source.get(keyword, pageIndex).catch((e) => {
+      return { isEnd: true, images: [] };
+    });
   },
 };
