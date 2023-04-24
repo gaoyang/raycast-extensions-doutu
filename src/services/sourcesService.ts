@@ -1,6 +1,6 @@
-import { ISource, DouTuLaSource, DouTuSource } from "./sources";
+import { ISource, DouTuLaSource, DouTuSource, DouBiZJSJ } from "./sources";
 
-const sources: ISource[] = [new DouTuSource(), new DouTuLaSource()];
+const sources: ISource[] = [new DouBiZJSJ(), new DouTuSource(), new DouTuLaSource()];
 let source: ISource | undefined;
 
 export default {
