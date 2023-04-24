@@ -1,10 +1,20 @@
-import { ISource, DouTuLaSource } from "./sources";
+import { ISource, DouTuLaSource, DouTuSource, DouBiZJSJ } from "./sources";
 
-const sources: ISource[] = [new DouTuLaSource()];
-const source = sources[0];
+const sources: ISource[] = [new DouBiZJSJ(), new DouTuSource(), new DouTuLaSource()];
+let source: ISource | undefined;
 
 export default {
-  get: (keyword: string, pageIndex: number, pageSize: number) => {
-    return source.get(keyword, pageIndex, pageSize);
+  sources,
+  getSource: () => source,
+  changeSource: (sourceName: string) => {
+    // console.log(`changeSource -> ${sourceName}`)
+    source = sources.find((o) => o.name === sourceName) ?? sources[0];
+  },
+  get: (keyword: string, pageIndex: number) => {
+    if (!source) return { isEnd: true, images: [] };
+    // console.log(`get -> keyword:${keyword} pageIndex:${pageIndex}`)
+    return source.get(keyword, pageIndex).catch((e) => {
+      return { isEnd: true, images: [] };
+    });
   },
 };

@@ -1,30 +1,34 @@
 {
   "$schema": "https://www.raycast.com/schemas/extension.json",
-  "name": "dou-tu",
-  "title": "斗图",
-  "description": "上班时间斗个图🌟",
-  "icon": "command-icon.png",
+  "name": "doutu",
+  "title": "DouTu",
+  "description": "An extension for easy retrieval of web emoji images while chatting.",
+  "icon": "icon.png",
   "author": "gaoyang",
   "categories": [
-    "Media"
+    "Media",
+    "Fun"
   ],
   "license": "MIT",
   "commands": [
     {
       "name": "index",
-      "title": "斗图",
-      "subtitle": "斗图",
-      "description": "上班时间斗个图🌟",
+      "title": "DouTu",
+      "subtitle": "doutu",
+      "description": "An extension for easy retrieval of web emoji images while chatting.",
       "mode": "view"
     }
   ],
   "dependencies": {
     "@raycast/api": "^1.39.1",
     "@raycast/utils": "^1.3.0",
-    "node-fetch": "^3.2.10"
+    "cheerio": "1.0.0-rc.12",
+    "node-fetch": "^3.2.10",
+    "uuid": "^8.3.2"
   },
   "devDependencies": {
     "@types/react": "^18.0.17",
+    "@types/uuid": "^8.3.4",
     "@typescript-eslint/eslint-plugin": "^5.0.0",
     "@typescript-eslint/parser": "^5.0.0",
     "eslint": "^7.32.0",
