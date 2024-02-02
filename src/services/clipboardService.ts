@@ -1,4 +1,4 @@
-import { environment, showHUD, showToast, Toast } from "@raycast/api";
+import { Clipboard, environment, showHUD, showToast, Toast } from "@raycast/api";
 import fetch from "node-fetch";
 import fs from "fs";
 import proc from "child_process";
@@ -26,9 +26,12 @@ export default {
     const type = await imageType(buffer);
     let file = `${tempDir}/${fileName}`;
     if (!fileName.endsWith(`.${type?.ext}`)) file += `.${type?.ext}`;
-    // console.log(file);
     await fs.writeFileSync(file, new Uint8Array(data), "binary");
-    proc.exec(`osascript -e 'set the clipboard to POSIX file "${file}"'`);
+    if (type?.mime === "image/gif") {
+      proc.exec(`osascript -e 'set the clipboard to POSIX file "${file}"'`);
+    } else {
+      proc.exec(`osascript -e 'set the clipboard to (read (POSIX file "${file}") as JPEG picture)'`);
+    }
     toast.hide();
     showHUD("✅ Copied to clipboard");
   },
