@@ -1,4 +1,4 @@
-import { Clipboard, environment, showHUD, showToast, Toast } from "@raycast/api";
+import { environment, showHUD, showToast, Toast } from "@raycast/api";
 import fetch from "node-fetch";
 import fs from "fs";
 import proc from "child_process";
