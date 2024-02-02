@@ -1,7 +1,7 @@
 import fetch from "node-fetch";
 import * as cheerio from "cheerio";
 import { v4 as uuidv4 } from "uuid";
-const defaultKeyword = "hi";
+const defaultKeyword = "hey";
 
 export declare interface IDoutuImage {
   id: string;
@@ -66,7 +66,7 @@ export class DouTuLaSource implements ISource {
   get = async (keyword: string | null, pageIndex: number): Promise<{ isEnd: boolean; images: IDoutuImage[] }> => {
     keyword = keyword && keyword.trim() !== "" ? keyword : defaultKeyword;
     const response = await fetch(
-      `https://www.pkdoutu.com/search?type=photo&more=1&keyword=${keyword ?? "ok"}&page=${pageIndex}`
+      `https://www.pkdoutu.com/search?type=photo&more=1&keyword=${keyword}&page=${pageIndex}`
     );
     const $ = cheerio.load(await response.text());
     const nodes = $("div.search-result.list-group-item").find("img.img-responsive").toArray();
@@ -74,7 +74,7 @@ export class DouTuLaSource implements ISource {
       isEnd: nodes.length < 72,
       images: duplication(
         nodes.map((node) => {
-          return { id: uuidv4(), url: node.attribs["data-backup"] };
+          return { id: uuidv4(), url: node.attribs["data-backup"].replace("http:", "https:")};
         }),
         (o) => o.url
       ),
